@@ -14,6 +14,7 @@ spec:
       containers:
       - name: ticontrolaapi
         image: leommiranda/ti-controla-django-api:latest
+        imagePullPolicy: "Always"
         env:
           - name: DJANGO_SUPERUSER_USERNAME
             valueFrom:
@@ -41,7 +42,7 @@ kind: Service
 metadata:
   name: ticontrolaapi
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
   - protocol: TCP  # protocolo padrao
     port: 80
