@@ -53,18 +53,16 @@ jobs:
           # Contents of kubeconfig file
           kubeconfig: ${{secrets.K8S_CONFIG}}
 
-      - name: Cria os secrets
-        uses: Azure/k8s-create-secret@v3.0
+      - name: Cria os secrets da API
+        uses: azure/k8s-create-secret@v3.0
         with:
+          namespace: 'default'
+          secret-type: 'generic'
           # Name of the secret. You can use this secret name in the Kubernetes YAML configuration file.
           secret-name: api-secret
           # JSON object with plaintext string data for secret ex: {"key1":"value1"}
-          string-data: >
-            {
-                "DJANGO_SUPERUSER_PASSWORD": ${{secrets.DJANGO_SUPERUSER_PASSWORD}},
-                "DJANGO_SUPERUSER_USERNAME": ${{secrets.DJANGO_SUPERUSER_USERNAME}},
-                "SECRET_KEY": ${{secrets.SECRET_KEY}}
-            }
+          string-data:  ${{ secrets.API_SECRET }}
+
 
       - name: Faz o deploy do cluster Kubernetes
         uses: Azure/k8s-deploy@v4.3
