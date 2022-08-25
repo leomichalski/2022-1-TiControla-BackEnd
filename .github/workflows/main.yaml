@@ -63,7 +63,6 @@ jobs:
           # JSON object with plaintext string data for secret ex: {"key1":"value1"}
           string-data:  ${{ secrets.API_SECRET }}
 
-
       - name: Faz o deploy do cluster Kubernetes
         uses: Azure/k8s-deploy@v4.3
         with:
@@ -71,6 +70,8 @@ jobs:
             leommiranda/ti-controla-django-api:latest
           # Path to the manifest files which will be used for deployment.
           manifests: |
+            ./k8s/clusterissuer.yaml
             ./k8s/deployment.yaml
+            ./k8s/ingress.yaml
           # # Resource group name - Only required if using private cluster
           # name: # optional

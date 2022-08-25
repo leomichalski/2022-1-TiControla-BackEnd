@@ -41,7 +41,7 @@ kind: Service
 metadata:
   name: ticontrolaapi
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
   - protocol: TCP  # protocolo padrao
     port: 80
