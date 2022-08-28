@@ -35,7 +35,7 @@ spec:
                 key: SECRET_KEY
                 optional: false
           - name: DEBUG
-            value: "False"
+            value: "0"
 ---
 apiVersion: v1
 kind: Service
