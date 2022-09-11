@@ -56,7 +56,7 @@ class RegisterView(views.APIView):
         user.objects.create_user(**request.data)
         
         # TODO: fazer link com o email_do_usuario e o token_de_validacao
-        link = get_current_site() + "????" + tokens.account_verification_token.make_token(user) + "????"
+        link = get_current_site() + "????" + tokens.default_token_generator.make_token(user) + "????"
         user.email_user(
             subject="Ative sua conta do TiControla.",
             message="Acesse o seguinte link para validar a sua conta: " + link
@@ -78,7 +78,7 @@ class VerifyAccountView(views.APIView):
         if not user:
             return
 
-        if not tokens.account_verification_token.check_token(user, token):
+        if not tokens.default_token_generator.check_token(user, token):
             return
 
         user.is_verified = True
