@@ -41,9 +41,9 @@ class LoginSerializer(serializers.Serializer):
             if not user.is_active:
                 msg = 'Account disabled, contact admin.'
                 raise serializers.ValidationError(msg, code='authorization')
-            # if not user.is_verified:
-            #     msg = 'Email is not verified.'
-            #     raise serializers.ValidationError(msg, code='authorization')
+            if not user.is_verified:
+                msg = 'Email is not verified.'
+                raise serializers.ValidationError(msg, code='authorization')
         else:
             msg = 'Both "email" and "password" are required.'
             raise serializers.ValidationError(msg, code='authorization')

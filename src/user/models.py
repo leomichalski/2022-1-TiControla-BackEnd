@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.mail import send_mail
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin)
 # from rest_framework_simplejwt.tokens import RefreshToken
@@ -65,6 +66,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+
+    def email_user(self, subject, message):
+        if self.full_name:
+            subject = self.full_name + ', ' + subject[0].lower() + subject[1:]
+
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=None,  # DEFAULT_FROM_EMAIL setting
+            recipient_list=[self.email],
+            fail_silently=False
+        )
 
     # def __str__(self):
     #     return self.email
