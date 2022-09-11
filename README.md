@@ -10,6 +10,7 @@ sudo docker-compose up --build
 
 ## Como fazer requisições HTTP para a API usando cURL
 A biblioteca cURL não é necessária. Para converter um comando cURL para uma linguagem de programação (como javascript), use o site <https://curlconverter.com/#javascript>. Para fins de debugging, além do cURL, por exemplo, existem as ferramentas httpie e postman.
+
 ```
 # criar usuário (não superusuário)
 curl -H "Content-Type: application/json" -X POST --data '{"username":"myusername", "password":"pass"}' "localhost:8000/register/"
@@ -30,3 +31,23 @@ curl -H "Cookie: sessionid=[sessionid];" -X GET --data 'username=myusername' 'lo
 curl -H "Cookie: csrftoken=[csrftoken];sessionid=[sessionid];" -H "X-CSRFToken: [csrftoken]" -X PUT --data 'username=myusername&saldo=999&limite_disponivel=1500' 'localhost:8000/profile/data/'
 
 curl -H "Cookie: csrftoken=[csrftoken];sessionid=[sessionid];" -H "X-CSRFToken: [csrftoken]" -X PATCH --data 'username=myusername&limite_maximo=7000&limite_disponivel=1500' 'localhost:8000/profile/data/'
+```
+
+
+## Como gerar migrations
+
+```
+# baixe a imagem docker a partir do Docker Hub
+docker pull leommiranda/ti-controla-django-api
+
+# navegue até o diretório "src"
+cd src
+
+# rode um terminal dentro da imagem docker usando o seguinte comando
+docker run --rm -it -v $(pwd):/current_dir -w /current_dir --user "$(id -u):$(id -g)" leommiranda/ti-controla-django-api bash
+
+# crie as migrations
+python3 manage.py makemigrations
+python3 manage.py makemigrations user
+python3 manage.py makemigrations user_data
+```
