@@ -15,28 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-# from rest_framework import routers
-# # from user.viewsets import UserViewSet
-# from user import viewsets as user_viewsets
+from rest_framework import routers
+# from user.viewsets import UserViewSet
+from user import viewsets as user_viewsets
 from user_data import viewsets as user_data_viewsets
 
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-
-###
-schema_view = get_schema_view(
-    openapi.Info(
-        title="Snippets API",
-        default_version='v1',
-        description="Test description",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@snippets.local"),
-        license=openapi.License(name="BSD License"),
-    ),
-    public=True,
-    permission_classes=[permissions.AllowAny],
-)
 
 # route = routers.DefaultRouter()
 
@@ -44,14 +27,10 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include('user.urls')),
-    # # path('', include(route.urls))
-    # path('register/', user_viewsets.RegisterView.as_view()),  # sign up
-    # path('login/', user_viewsets.LoginView.as_view()),
-    # path('profile/', user_viewsets.ProfileView.as_view()),
+    # path('', include(route.urls))
+    path('register/', user_viewsets.RegisterView.as_view()),  # sign up
+    path('login/', user_viewsets.LoginView.as_view()),
+    path('logout/', user_viewsets.LogoutView.as_view()),
+    path('profile/', user_viewsets.ProfileView.as_view()),
     path('profile/data/', user_data_viewsets.UserDataView.as_view()),
-    path('', schema_view.with_ui('swagger',
-                                 cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc',
-                                       cache_timeout=0), name='schema-redoc'),
 ]
