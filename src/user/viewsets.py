@@ -17,7 +17,7 @@ from rest_framework import views
 from rest_framework.response import Response
 
 from user import serializers, tokens
-
+from user_data import models as user_data_models
 
 class LoginView(views.APIView):
     # This view should be accessible also for unauthenticated users.
@@ -54,6 +54,9 @@ class RegisterView(views.APIView):
     def post(self, request, format=None):
         user_model = get_user_model()
         current_user = user_model.objects.create_user(**request.data)
+        # popular os dados do usuario
+        current_user_data = user_data_models.UserData(email=current_user.email)
+        current_user_data.save()
 
         # TODO: fazer link com o email_do_usuario e o token_de_validacao
         link = get_current_site() + "????" + tokens.default_token_generator.make_token(current_user) + "????"
