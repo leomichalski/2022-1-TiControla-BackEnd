@@ -52,19 +52,18 @@ class RegisterView(views.APIView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
-        user = get_user_model()
-        user.objects.create_user(**request.data)
-        
+        user_model = get_user_model()
+        current_user = user_model.objects.create_user(**request.data)
+
         # TODO: fazer link com o email_do_usuario e o token_de_validacao
-        link = get_current_site() + "????" + tokens.default_token_generator.make_token(user) + "????"
-        user.email_user(
+        link = get_current_site() + "????" + tokens.default_token_generator.make_token(current_user) + "????"
+        current_user.email_user(
             subject="Ative sua conta do TiControla.",
             message="Acesse o seguinte link para validar a sua conta: " + link
         )
         return Response(None, status=status.HTTP_202_ACCEPTED)
 
 
-# TODO: criar view para receber o link de validação do usuario e alterar o status do usuario para verificado
 class VerifyAccountView(views.APIView):
     # This view should be accessible also for unauthenticated users.
     permission_classes = (permissions.AllowAny,)
@@ -73,15 +72,15 @@ class VerifyAccountView(views.APIView):
         token = request.data['token']
         
         # get user from the request email
-        user = models.UserData.objects.get(email=self.request.data['email'])
+        current_user = models.UserData.objects.get(email=self.request.data['email'])
 
-        if not user:
+        if not current_user:
             return
 
-        if not tokens.default_token_generator.check_token(user, token):
+        if not tokens.default_token_generator.check_token(current_user, token):
             return
 
-        user.is_verified = True
-        user.save()
+        current_user.is_verified = True
+        current_user.save()
 
         return Response(None, status=status.HTTP_202_ACCEPTED)
