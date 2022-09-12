@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE', 'ticontroladb'),
-        'USER':  os.environ.get('MYSQL_USER', 'root'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'pass'),
+        'NAME': os.environ.get('MYSQL_DATABASE'),
+        'USER':  os.environ.get('MYSQL_USER'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
         'HOST': os.environ.get('MYSQL_DATABASE_HOST'),
-        'PORT': os.environ.get('MYSQL_DATABASE_PORT', 3306),
+        'PORT': os.environ.get('MYSQL_DATABASE_PORT'),
     }
 }
 
