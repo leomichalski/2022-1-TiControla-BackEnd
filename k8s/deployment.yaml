@@ -52,6 +52,24 @@ spec:
                 name: api-secret
                 key: EMAIL_HOST_USER
                 optional: false
+          - name: MYSQL_DATABASE
+            value: "ticontroladb"
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: MYSQL_USER
+                optional: false
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: MYSQL_PASSWORD
+                optional: false
+          - name: MYSQL_DATABASE_HOST
+            value: "db"
+          - name: MYSQL_DATABASE_PORT
+            value: "3306"
           - name: DEBUG
             value: "0"
 ---
