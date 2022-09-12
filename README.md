@@ -53,3 +53,22 @@ curl -H "Cookie: sessionid=SUBSTITUIR_POR_SESSIONID;" -X GET 'localhost:8000/pro
 ```
 curl -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" -X PATCH --data 'limite_maximo=7000&limite_disponivel=1500' 'localhost:8000/profile/data/'
 ```
+
+
+## Como gerar migrations
+
+```
+# baixe a imagem docker a partir do Docker Hub
+docker pull leommiranda/ti-controla-django-api
+
+# navegue até o diretório "src"
+cd src
+
+# rode um terminal dentro da imagem docker usando o seguinte comando
+docker run --rm -it -v $(pwd):/current_dir -w /current_dir --user "$(id -u):$(id -g)" leommiranda/ti-controla-django-api bash
+
+# crie as migrations
+python3 manage.py makemigrations
+python3 manage.py makemigrations user
+python3 manage.py makemigrations user_data
+```
