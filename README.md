@@ -36,6 +36,12 @@ curl -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SES
 curl -H "Cookie: sessionid=SUBSTITUIR_POR_SESSIONID;" -X GET 'localhost:8000/profile/'
 ```
 
+### Como atualizar o nome de um usuário logado. Observação: não é possível atualizar o email. Lembre de reutilizar o "csrftoken" e o "sessionid".
+
+```
+curl -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" -X PATCH --data 'full_name=Leonardo Miranda' 'localhost:8000/profile/'
+```
+
 ### Como requisitar dados do usuário logado relacionados a finanças. Essa requisição pode ser usada para mostrar o saldo do usuário, o limite disponível do cartão e o limite máximo do cartão. Para cada usuário, só há um valor de saldo, um único valor de limite disponível e um único valor de limite máximo. Lembre de reutilizar o "sessionid".
 
 ```

@@ -31,7 +31,7 @@ class LogoutView(views.APIView):
 
 
 # classe para mostrar/atualizar os dados do usuario, requer que o usuario esteja autenticado
-class ProfileView(views.APIView):
+class ProfileView(generics.RetrieveUpdateAPIView):
 
     serializer_class = serializers.UserSerializer
 
@@ -39,6 +39,10 @@ class ProfileView(views.APIView):
         # returns the data that belongs to the user
         return self.request.user
 
+    def patch_object(self):
+        # updates the user's data
+        self.request.user.patch(full_name=self.request.data.full_name)
+        return Response(None, status=status.HTTP_202_ACCEPTED)
 
 
 class RegisterView(views.APIView):
