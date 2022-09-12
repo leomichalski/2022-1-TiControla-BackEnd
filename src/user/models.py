@@ -4,6 +4,8 @@ from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin)
 # from rest_framework_simplejwt.tokens import RefreshToken
 
+from user_data import models as user_data_models
+
 
 class UserManager(BaseUserManager):
 
@@ -12,14 +14,20 @@ class UserManager(BaseUserManager):
             raise TypeError('Users should have a Email')
         if not password:
             raise TypeError('Users should have a password')
+        email = self.normalize_email(email)
 
         user = self.model(
-            email=self.normalize_email(email),
+            email=email,
             full_name=full_name,
             **extra_fields
         )
         user.set_password(password)
         user.save()
+
+        # popular os dados do usuario
+        current_user_data = user_data_models.UserData(email=email)
+        current_user_data.save()
+
         # user.save(using=self._db)
         return user
 

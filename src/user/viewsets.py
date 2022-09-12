@@ -1,14 +1,6 @@
-# from rest_framework import viewsets
-# from user import serializers
-# from user import models
-
-
-# class UserViewSet(viewsets.ModelViewSet):
-#     serializer_class = serializers.UserSerializer
-#     queryset = models.User.objects.all()
-
 from django.contrib.auth import login, logout, get_user_model
 from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
 
 from rest_framework import generics
 from rest_framework import permissions
@@ -16,8 +8,7 @@ from rest_framework import status
 from rest_framework import views
 from rest_framework.response import Response
 
-from user import serializers, tokens
-from user_data import models as user_data_models
+from user import serializers, tokens, models
 
 class LoginView(views.APIView):
     # This view should be accessible also for unauthenticated users.
@@ -39,12 +30,15 @@ class LogoutView(views.APIView):
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
 
-# classe para pegar os dados do usuario, requer que o usuario esteja autenticado
-class ProfileView(generics.RetrieveAPIView):
+# classe para mostrar/atualizar os dados do usuario, requer que o usuario esteja autenticado
+class ProfileView(views.APIView):
+
     serializer_class = serializers.UserSerializer
 
     def get_object(self):
+        # returns the data that belongs to the user
         return self.request.user
+
 
 
 class RegisterView(views.APIView):
@@ -54,15 +48,23 @@ class RegisterView(views.APIView):
     def post(self, request, format=None):
         user_model = get_user_model()
         current_user = user_model.objects.create_user(**request.data)
-        # popular os dados do usuario
-        current_user_data = user_data_models.UserData(email=current_user.email)
-        current_user_data.save()
+        
+        # generate link to verify the user email
+        verify_token = tokens.default_token_generator.make_token(current_user)
+        # get the current url of the server
+        current_domain = get_current_site(request).domain
+        relative_link = reverse('verification')
 
-        # TODO: fazer link com o email_do_usuario e o token_de_validacao
-        link = get_current_site() + "????" + tokens.default_token_generator.make_token(current_user) + "????"
+        link = current_domain + relative_link + '?email=' + current_user.email + '&token=' + verify_token
+        # check if the server is using http or https
+        if request.is_secure():
+            link = 'https://' + link
+        else:
+            link = 'http://' + link
+        # send email with link to verify the user email
         current_user.email_user(
-            subject="Ative sua conta do TiControla.",
-            message="Acesse o seguinte link para validar a sua conta: " + link
+            subject='Ative sua conta do TiControla.',
+            message='Acesse o seguinte link para validar a sua conta:\n' + link
         )
         return Response(None, status=status.HTTP_202_ACCEPTED)
 
@@ -71,17 +73,17 @@ class VerifyAccountView(views.APIView):
     # This view should be accessible also for unauthenticated users.
     permission_classes = (permissions.AllowAny,)
 
-    def post(self, request, format=None):
-        token = request.data['token']
-        
+    def get(self, request, format=None):
+        token = request.GET.get('token')
+
         # get user from the request email
-        current_user = models.UserData.objects.get(email=self.request.data['email'])
+        current_user = models.User.objects.get(email=request.GET.get('email'))
 
         if not current_user:
-            return
+            return Response(None, status=status.HTTP_404_NO_CONTENT)
 
         if not tokens.default_token_generator.check_token(current_user, token):
-            return
+            return Response(None, status=status.HTTP_401_UNAUTHORIZED)
 
         current_user.is_verified = True
         current_user.save()
