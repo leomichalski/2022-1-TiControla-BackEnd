@@ -34,6 +34,24 @@ spec:
                 name: api-secret
                 key: SECRET_KEY
                 optional: false
+          - name: EMAIL_HOST_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-secret
+                key: EMAIL_HOST_USER
+                optional: false
+          - name: EMAIL_HOST_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: api-secret
+                key: EMAIL_HOST_PASSWORD
+                optional: false
+          - name: DEFAULT_FROM_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: api-secret
+                key: EMAIL_HOST_USER
+                optional: false
           - name: DEBUG
             value: "0"
 ---
