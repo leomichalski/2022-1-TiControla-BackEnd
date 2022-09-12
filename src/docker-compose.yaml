@@ -1,8 +1,9 @@
-version: '3'
-
+version: "3"
 services:
   api:
     container_name: api
+    depends_on:
+      - db
     restart: always
     build: ./
     command: >
@@ -17,3 +18,17 @@ services:
     #   - ./.env
     # volumes:
     #   - .:/core
+
+  db:
+    container_name: db
+    restart: always
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./development.env
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
