@@ -38,7 +38,6 @@ jobs:
           tags: |
             leommiranda/ti-controla-django-api:latest
             leommiranda/ti-controla-django-api:${{github.run_number}}
-
   CD:
     runs-on: ubuntu-latest
     needs: [docker-upload]
