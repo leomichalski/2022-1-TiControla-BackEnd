@@ -1,32 +1,70 @@
-## Como levantar a API
 
-```
-# esteja na pasta "2022-1-TiControla/django-api"
-cd 2022-1-TiControla-BackEnd/api
-
-# rode o container
-sudo docker-compose up --build
-```
-
-## Como fazer requisições HTTP para a API usando cURL
+## Como fazer requisições HTTP para a API usando cURL.
 A biblioteca cURL não é necessária. Para converter um comando cURL para uma linguagem de programação (como javascript), use o site <https://curlconverter.com/#javascript>. Para fins de debugging, além do cURL, por exemplo, existem as ferramentas httpie e postman.
+
+
+##### Como cadastrar um usuário. Observação: é impossível criar um superusuário por meio da API pública.
+
 ```
-# criar usuário (não superusuário)
-curl  -H "Content-Type: application/json" -X POST --data '{"username":"myusername", "password":"pass"}' "https://24.199.64.220.nip.io/register/"
+curl -H "Content-Type: application/json" \
+     -X POST \
+     --data '{"email":"email@gmail.com", "password":"pass"}' \
+     "https://24.199.64.220.nip.io/register/"
+```
 
-# fazer login (é necessário salvar o valor do sessionid e o do csrftoken para usar depois)
-curl -H "Content-Type: application/json" -X POST --data '{"username":"myusername", "password":"pass"}' "https://24.199.64.220.nip.io/login/"
+##### Como fazer o login de um usuário. Atenção: como a nossa autenticação é baseada em sessões de uso, é necessário reutilizar dois outputs gerados pelo login a fim de acessar os dados do usuário. Esses outputs são o "csrftoken" e o "sessionid".
 
-# mostrar dados do usuario logado (email, primeiro nome, ultimo nome, data de criação do usuário)
-curl -H "Cookie: sessionid=[sessionid];" -X GET 'https://24.199.64.220.nip.io/profile/'
+```
+curl -H "Content-Type: application/json" \
+     -X POST \
+     --data '{"email":"email@gmail.com", "password":"pass"}' \
+     "https://24.199.64.220.nip.io/login/"
+```
 
-# criar dados do usuário logado relacionados a finanças
-curl -H "referer: https://24.199.64.220.nip.io/" -H "Cookie: csrftoken=[csrftoken];sessionid=[sessionid];" -H "X-CSRFToken: [csrftoken]" -X POST --data 'username=myusername&saldo=1000&limite_maximo=3000&limite_disponivel=2500' 'https://24.199.64.220.nip.io/profile/data/'
+##### Como fazer o logout do usuário. Lembre de reutilizar o "csrftoken" e o "sessionid".
 
-# mostrar dados do usuário logado relacionados a finanças (username, saldo, limite_maximo, limite_disponivel)
-curl -H "Cookie: sessionid=[sessionid];" -X GET --data 'username=myusername' 'https://24.199.64.220.nip.io/profile/data/'
+```
+curl -H "referer: https://24.199.64.220.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X POST \
+     'https://24.199.64.220.nip.io/logout/'
+```
 
-# atualizar dados do usuário logado relacionados a finanças
-curl -H "referer: https://24.199.64.220.nip.io/" -H "Cookie: csrftoken=[csrftoken];sessionid=[sessionid];" -H "X-CSRFToken: [csrftoken]" -X PUT --data 'username=myusername&saldo=999&limite_disponivel=1500' 'https://24.199.64.220.nip.io/profile/data/'
+##### Como requisitar dados pessoais do usuário logado (email, nome completo, data de criação do usuário). Essa requisição pode ser usada para mostrar uma tela com os dados pessoais que o usuário informou à API. Lembre de reutilizar o "sessionid".
 
-curl -H "referer: https://24.199.64.220.nip.io/" -H "Cookie: csrftoken=[csrftoken];sessionid=[sessionid];" -H "X-CSRFToken: [csrftoken]" -X PATCH --data 'username=myusername&limite_maximo=7000&limite_disponivel=1500' 'https://24.199.64.220.nip.io/profile/data/'
+```
+curl -H "Cookie: sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -X GET \
+     'https://24.199.64.220.nip.io/profile/'
+```
+
+##### Como atualizar o nome de um usuário logado. Observação: não é possível atualizar o email. Lembre de reutilizar o "csrftoken" e o "sessionid".
+
+```
+curl -H "referer: https://24.199.64.220.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X PATCH \
+     --data 'full_name=Leonardo Miranda' \
+     'https://24.199.64.220.nip.io/profile/'
+```
+
+##### Como requisitar dados do usuário logado relacionados a finanças. Essa requisição pode ser usada para mostrar o saldo do usuário, o limite disponível do cartão e o limite máximo do cartão. Para cada usuário, só há um valor de saldo, um único valor de limite disponível e um único valor de limite máximo. Lembre de reutilizar o "sessionid".
+
+```
+curl -H "Cookie: sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -X GET \
+     'https://24.199.64.220.nip.io/profile/data/'
+```
+
+##### Como atualizar dados do usuário logado relacionados a finanças. Essa requisição pode ser usada para atualizar o saldo do usuário (saldo), o limite disponível do cartão (limite_disponivel) e o limite máximo do cartão (limite_maximo). É possível atualizar cada valor de forma separada (perceba que no exemplo abaixo o saldo não é atualizado). Lembre de reutilizar o "csrftoken" e o "sessionid".
+
+```
+curl -H "referer: https://24.199.64.220.nip.io/" \
+     -H "Cookie: csrftoken=SUBSTITUIR_POR_CSRFTOKEN;sessionid=SUBSTITUIR_POR_SESSIONID;" \
+     -H "X-CSRFToken: SUBSTITUIR_POR_CSRFTOKEN" \
+     -X PATCH \
+     --data 'limite_maximo=7000&limite_disponivel=1500' \
+     'https://24.199.64.220.nip.io/profile/data/'
+```

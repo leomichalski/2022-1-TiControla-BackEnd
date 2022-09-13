@@ -12,7 +12,6 @@ services:
     env_file:
       - ./debug.env
       - ./.env
-
   db:
     container_name: db
     restart: always

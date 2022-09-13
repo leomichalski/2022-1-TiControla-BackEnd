@@ -7,7 +7,7 @@ class UserDataSerializer(serializers.ModelSerializer):
    class Meta:
        model = models.UserData
        fields = [
-           'username',  # ou email
+           'email',
            'saldo',
            'limite_maximo',
            'limite_disponivel',

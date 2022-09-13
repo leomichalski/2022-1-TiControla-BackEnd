@@ -7,12 +7,12 @@ from user import models
 class LoginSerializer(serializers.Serializer):
     """
     This serializer defines two fields for authentication:
-      * username
+      * email
       * password.
     It will try to authenticate the user with when validated.
     """
-    username = serializers.CharField(
-        label="Username",
+    email = serializers.EmailField(
+        label="Email",
         write_only=True
     )
     password = serializers.CharField(
@@ -24,19 +24,28 @@ class LoginSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
-        # Take username and password from request
-        username = attrs.get('username')
+        # Take email and password from request
+        email = attrs.get('email')
         password = attrs.get('password')
 
-        if username and password:
+        if email and password:
             # Try to authenticate the user using Django auth framework.
-            user = authenticate(request=self.context.get('request'), username=username, password=password)
+            user = authenticate(request=self.context.get('request'), email=email, password=password)
+            # user = authenticate(email=email, password=password)
+            # user = authenticate(request=self.context.get('request'), username=email, password=password)
+            
             if not user:
                 # If we don't have a regular user, raise a ValidationError
-                msg = 'Access denied: wrong username or password.'
+                msg = 'Access denied: wrong email or password.'
+                raise serializers.ValidationError(msg, code='authorization')
+            if not user.is_active:
+                msg = 'Account disabled, contact admin.'
+                raise serializers.ValidationError(msg, code='authorization')
+            if not user.is_verified:
+                msg = 'Email is not verified.'
                 raise serializers.ValidationError(msg, code='authorization')
         else:
-            msg = 'Both "username" and "password" are required.'
+            msg = 'Both "email" and "password" are required.'
             raise serializers.ValidationError(msg, code='authorization')
         # We have a valid user, put it in the serializer's validated_data.
         # It will be used in the view.
@@ -49,9 +58,11 @@ class UserSerializer(serializers.ModelSerializer):
    class Meta:
        model = models.User
        fields = [
-           'username',
            'email',
-           'first_name',
-           'last_name',
-           'date_joined',
+           'full_name',
+           'is_active',
+           'is_verified',
+           'is_superuser',
+           'created_at',
+           'updated_at',
        ]
