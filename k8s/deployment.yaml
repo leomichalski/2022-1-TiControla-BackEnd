@@ -1,6 +1,61 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        ports:
+          - containerPort: 3306
+        env:
+          - name: MYSQL_DATABASE
+            value: "ticontroladb"
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: MYSQL_USER
+                optional: false
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: MYSQL_PASSWORD
+                optional: false
+          - name: MYSQL_DATABASE_HOST
+            value: "db"
+          - name: MYSQL_DATABASE_PORT
+            value: "3306"
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  selector:
+    # matchLabels:
+    app: mysql
+  ports:
+  - protocol: TCP  # protocolo padrao
+    port: 3306
+    targetPort: 3306
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: ticontrolaapi
 spec:
   selector:
@@ -15,6 +70,8 @@ spec:
       - name: ticontrolaapi
         image: leommiranda/ti-controla-django-api:latest
         imagePullPolicy: "Always"
+        ports:
+          - containerPort: 3306
         env:
           - name: DJANGO_SUPERUSER_USERNAME
             valueFrom:
