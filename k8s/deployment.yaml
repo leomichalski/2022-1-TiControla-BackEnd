@@ -32,7 +32,7 @@ spec:
                 key: MYSQL_PASSWORD
                 optional: false
           - name: MYSQL_DATABASE_HOST
-            value: "db"
+            value: "mysql"
           - name: MYSQL_DATABASE_PORT
             value: "3306"
 
@@ -124,7 +124,7 @@ spec:
                 key: MYSQL_PASSWORD
                 optional: false
           - name: MYSQL_DATABASE_HOST
-            value: "db"
+            value: "mysql"
           - name: MYSQL_DATABASE_PORT
             value: "3306"
           - name: DEBUG
