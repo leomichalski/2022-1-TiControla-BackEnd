@@ -15,9 +15,9 @@ cd 2022-1-TiControla-IaC
 touch terraform.tfvars
 
 # botar o seguinte conteúdo no arquivo "terraform.tfvars" substituindo os valores adequadamente
-do_token = SUBSTITUIR_PELO_SEU_TOKEN_DA_DIGITAL_OCEAN
-k8s_name = k8s-name
-region   = nyc1
+do_token = "SUBSTITUIR_PELO_SEU_TOKEN_DA_DIGITAL_OCEAN"
+k8s_name = "k8s-name"
+region   = "nyc1"
 
 # inicializar o terraform
 terraform init
@@ -25,7 +25,7 @@ terraform init
 # ver as ações a serem realizadas antes de realizar
 terraform plan
 
-# criar servidor ou executar alterações no servidor (é necessário escrever "y" ou usar a flag --auto-approve)
+# criar servidor ou executar alterações no servidor (é necessário escrever "yes" ou usar a flag -auto-approve)
 terraform apply
 
 # após criar o servidor e o cluster kubernetes, vai ser gerado um arquivo "kube_config.yaml" que será necessário para as próximas etapas
@@ -104,7 +104,6 @@ DB_SECRET
 }
 ```
 
-
 ## Setup do ambiente de debug/desenvolvimento
 
 ### Usando Docker
@@ -131,7 +130,7 @@ EMAIL_HOST_PASSWORD=SUBSTITUIR_PELA_APP_SPECIFIC_PASSWORD
 sudo docker-compose up --build
 ```
 
-## Como gerar migrations. 
+## Como gerar migrations.
 Este processo não é automático e nem deve ser automatizado: "Once the migration is applied, commit the migration and the models change to your version control system as a single commit - that way, when other developers (or your production servers) check out the code, they’ll get both the changes to your models and the accompanying migration at the same time." [fonte](https://docs.djangoproject.com/en/4.1/topics/migrations/#workflow)
 
 ### Usando Docker
