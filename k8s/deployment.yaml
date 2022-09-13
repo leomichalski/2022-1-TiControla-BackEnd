@@ -1,3 +1,4 @@
+# Don't scale the mysql app. This setup is for single-instance apps only. The underlying PersistentVolume can only be mounted to one mysql Pod. For clustered stateful apps, see the StatefulSet documentation.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,6 +7,8 @@ spec:
   selector:
     matchLabels:
       app: mysql
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -35,8 +38,13 @@ spec:
             value: "mysql"
           - name: MYSQL_DATABASE_PORT
             value: "3306"
-
-
+        volumeMounts:
+          - name: mysql-persistent-storage
+            mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
 ---
 apiVersion: v1
 kind: Service
