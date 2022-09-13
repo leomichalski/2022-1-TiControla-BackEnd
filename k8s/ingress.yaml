@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - "24.199.64.220.nip.io"
+    - "161.35.248.92.nip.io"
     secretName: "ticontrola-api-tls"
   rules:
-    - host: "24.199.64.220.nip.io"
+    - host: "161.35.248.92.nip.io"
       http:
         paths:
         - path: /

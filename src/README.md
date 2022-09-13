@@ -35,8 +35,8 @@ terraform apply
 Mais detalhes em: https://kubernetes.github.io/ingress-nginx/user-guide/tls/
 
 ```
-# substituir a string "24.199.64.220.nip.io" pelo domínio da aplicação e "ticontrola-api" por um nome adequado para a aplicação
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ticontrola-api.key -out ticontrola-api.crt -subj "/CN=24.199.64.220.nip.io/O=24.199.64.220.nip.io"
+# substituir a string "161.35.248.92.nip.io" pelo domínio da aplicação e "ticontrola-api" por um nome adequado para a aplicação
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ticontrola-api.key -out ticontrola-api.crt -subj "/CN=161.35.248.92.nip.io/O=161.35.248.92.nip.io"
 ```
 
 ##### Como subir certificado tls para o cluster k8s
