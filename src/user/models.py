@@ -87,8 +87,8 @@ class User(AbstractBaseUser, PermissionsMixin):
             fail_silently=False
         )
 
-    # def __str__(self):
-    #     return self.email
+    def __str__(self):
+        return self.email
 
     # def tokens(self):
     #     refresh = RefreshToken.for_user(self)

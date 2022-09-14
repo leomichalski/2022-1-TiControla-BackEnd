@@ -36,4 +36,5 @@ urlpatterns = [
     path('logout/', user_viewsets.LogoutView.as_view()),
     path('profile/', user_viewsets.ProfileView.as_view()),
     path('profile/data/', user_data_viewsets.UserDataView.as_view()),
+    path('cartao/list/', cartao_viewsets.UserCartaoListView.as_view()),
 ]
