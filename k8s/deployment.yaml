@@ -1,14 +1,11 @@
-# Don't scale the mysql app. This setup is for single-instance apps only. The underlying PersistentVolume can only be mounted to one mysql Pod. For clustered stateful apps, see the StatefulSet documentation.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: deploy-mysql
 spec:
   selector:
     matchLabels:
       app: mysql
-  strategy:
-    type: Recreate
   template:
     metadata:
       labels:
@@ -20,44 +17,39 @@ spec:
         ports:
           - containerPort: 3306
         env:
-          - name: MYSQL_DATABASE
-            value: "ticontroladb"
-          - name: MYSQL_USER
-            valueFrom:
-              secretKeyRef:
-                name: db-secret
-                key: MYSQL_USER
-                optional: false
-          - name: MYSQL_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: db-secret
-                key: MYSQL_PASSWORD
-                optional: false
-          - name: MYSQL_DATABASE_HOST
-            value: "mysql"
-          - name: MYSQL_DATABASE_PORT
-            value: "3306"
-        volumeMounts:
-          - name: mysql-persistent-storage
-            mountPath: /var/lib/mysql
-      volumes:
-      - name: mysql-persistent-storage
-        persistentVolumeClaim:
-          claimName: mysql-pv-claim
+        - name: MYSQL_DATABASE
+          value: ticontroladb
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: MYSQL_USER
+              optional: false
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: MYSQL_PASSWORD
+              optional: false
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: MYSQL_ROOT_PASSWORD
+              optional: false
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
+  name: service-mysql
 spec:
-  selector:
-    # matchLabels:
-    app: mysql
+  type: ClusterIP
   ports:
   - protocol: TCP  # protocolo padrao
     port: 3306
     targetPort: 3306
+  selector:
+    app: mysql
 
 ---
 
@@ -118,7 +110,7 @@ spec:
                 key: EMAIL_HOST_USER
                 optional: false
           - name: MYSQL_DATABASE
-            value: "ticontroladb"
+            value: ticontroladb
           - name: MYSQL_USER
             valueFrom:
               secretKeyRef:
@@ -132,9 +124,7 @@ spec:
                 key: MYSQL_PASSWORD
                 optional: false
           - name: MYSQL_DATABASE_HOST
-            value: "mysql"
-          - name: MYSQL_DATABASE_PORT
-            value: "3306"
+            value: service-mysql
           - name: DEBUG
             value: "0"
 ---

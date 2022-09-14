@@ -80,7 +80,6 @@ jobs:
           # Path to the manifest files which will be used for deployment.
           manifests: |
             ./k8s/clusterissuer.yaml
-            ./k8s/persistentvolume.yaml
             ./k8s/deployment.yaml
             ./k8s/ingress.yaml
           # # Resource group name - Only required if using private cluster
