@@ -8,7 +8,7 @@ A biblioteca cURL não é necessária. Para converter um comando cURL para uma l
 ```
 curl -H "Content-Type: application/json" \
      -X POST \
-     --data '{"email":"email@gmail.com", "password":"pass"}' \
+     --data '{"email":"SUBSTITUIR_PELO_SEU_EMAIL@gmail.com", "password":"pass"}' \
      "https://161.35.248.92.nip.io/register/"
 ```
 
@@ -17,7 +17,7 @@ curl -H "Content-Type: application/json" \
 ```
 curl -H "Content-Type: application/json" \
      -X POST \
-     --data '{"email":"email@gmail.com", "password":"pass"}' \
+     --data '{"email":"SUBSTITUIR_PELO_SEU_EMAIL@gmail.com", "password":"pass"}' \
      "https://161.35.248.92.nip.io/login/"
 ```
 
