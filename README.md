@@ -10,7 +10,7 @@
 
 
 
-
+dasdsadasd
 ## Como fazer requisições HTTP para a API usando cURL.
 A biblioteca cURL não é necessária. Para converter um comando cURL para uma linguagem de programação (como javascript), use o site <https://curlconverter.com/#javascript>. Para fins de debugging, além do cURL, por exemplo, existem as ferramentas httpie e postman.
 
