@@ -15,7 +15,7 @@
 A biblioteca cURL não é necessária. Para converter um comando cURL para uma linguagem de programação (como javascript), use o site <https://curlconverter.com/#javascript>. Para fins de debugging, além do cURL, por exemplo, existem as ferramentas httpie e postman.
 
 
-##### Como cadastrar um usuário. Observação: é impossível criar um superusuário por meio da API pública.
+##### Como cadastrar um usuário. Observação: é impossíveacfafsdcfsl criar um superusuário por meio da API pública.
 
 ```
 curl -H "Content-Type: application/json" \
