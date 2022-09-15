@@ -1,3 +1,4 @@
+alterar readme para testar github action
 ## Links úteis.
 
 - [Como fazer requisições HTTP para a API.](#como-fazer-requisições-http-para-a-api-usando-curl)
