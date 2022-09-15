@@ -24,8 +24,9 @@ jobs:
           pip install pycodestyle
       - name: Lint Python code
         run: |
-          LINT_OUTPUT=$(pycodestyle --select E,W --ignore=E121,E123,E126,E133,E226,E241,E242,E704,W503,W504,E131 --exclude=.git,*.pyc,*migrations* --count --show-source  --statistics --show-pep8 src/ | grep src | grep .py)
-          echo "LINT_MESSAGE=$LINT_OUTPUT" >> $GITHUB_ENV
+          echo 'LINT_MESSAGE=<<EOF' >> $GITHUB_ENV
+          pycodestyle --select E,W --ignore=E121,E123,E126,E133,E226,E241,E242,E704,W503,W504,E131 --exclude=.git,*.pyc,*migrations* --count --show-source  --statistics --show-pep8 src/ | grep src | grep .py >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
 
       - name: Post result to PR
         uses: mshick/add-pr-comment@v1
