@@ -25,7 +25,9 @@ jobs:
       - name: Lint Python code
         run: |
           echo 'LINT_MESSAGE<<EOF' >> $GITHUB_ENV
+          echo $'Output do pycodestyle configurado de acordo com o PEP8:\n```\n'
           pycodestyle --select E,W --ignore=E121,E123,E126,E133,E226,E241,E242,E704,W503,W504,E131 --exclude=.git,*.pyc,*migrations* --count --show-source  --statistics --show-pep8 src/ | grep -e src -e .py -A 2 >> $GITHUB_ENV
+          echo $'\n```\n' >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
       - name: Post result to PR
