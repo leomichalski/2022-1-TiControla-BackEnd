@@ -1,5 +1,5 @@
 ## Links úteis.
-
+dsadinaslydbnaoçskd
 - [Como fazer requisições HTTP para a API.](#como-fazer-requisições-http-para-a-api-usando-curl)
 - [Setup do ambiente de produção.](/src#setup-do-ambiente-de-debugdesenvolvimento)
 - [Setup do ambiente de local de desenvolvimento.](/src#setup-do-ambiente-de-debugdesenvolvimento)
